@@ -2,17 +2,36 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import BusinessList from './components/BusinessList/BusinessList.js';
+import SearchBar from './components/SearchBar/SearchBar.js';
+import Yelp from './util/Yelp.js';
+
+
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      businesses: []
+    };
+
+    this.searchYelp = this.searchYelp.bind(this)
+  }
+
+  searchYelp(term, location, sortBy) {
+    Yelp.search(term, location, sortBy).then(businesses => {
+      this.setState({
+        businesses: businesses
+      });
+    });
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          Hello World!
-        </p>
+        <h1>ravenous</h1>
+        <SearchBar searchYelp={this.searchYelp} />
+        <BusinessList businesses={this.state.businesses}/>
       </div>
     );
   }
